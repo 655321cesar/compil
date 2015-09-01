@@ -2,8 +2,8 @@ __author__ = 'Cesar'
 
 
 class Transicao:
-    def __init__(self,nome, estado_atual, token, prox_estado):
-        self.nome =nome
+    def __init__(self, nome, estado_atual, token, prox_estado):
+        self.nome = nome
         self.estado_atual = estado_atual
         self.token = token
         self.prox_estado = prox_estado
