@@ -1,1 +1,1 @@
-TI,I<N>,I,I<N,N,N>,I<N>
+ti,i<n>,i,i<n,n,n>,i<n>

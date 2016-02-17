@@ -25,7 +25,7 @@ class Automato:
 
         arquivo = open(self.filename, 'r')
         linha = arquivo.readline().rstrip('\n')
-        self.name = linha
+        self.name = linha.split('"')[1::2]
 
         linha = arquivo.readline().rstrip('\n')
         self.estados = linha.split('"')[1::2]
@@ -75,39 +75,50 @@ class MaquinaDeEstados:
     def executar(self):
         deve_verificar_estado = False
 
-        print self.entrada
+        print [i.token for i in self.entrada]
         for token in self.entrada:
-            if token not in self.automato.alfabeto:
+            if token.token not in [item.token for item in self.automato.alfabeto]:
                 print "Cadeia de entrada possui tokens nao presentes no alfabeto"
                 return 1
 
         while True:
-            token = self.entrada.pop(0)
-            trans_validas = []
-            for transicao in self.automato.transicoes:
-                if transicao.estado_atual == self.estadoAtual:
-                    trans_validas.append(transicao)
+            try:
+                token = self.entrada.pop(0)
+                trans_validas = []
+                for transicao in self.automato.transicoes:
+                    if transicao.estado_atual == self.estadoAtual:
+                        trans_validas.append(transicao)
 
-            for transicao in trans_validas:
-                if transicao.token == token:
-                    if token.classe == 'submaq':
-                        self.pilha.append(transicao.prox_estado)
-                        sub = MaquinaDeEstados(token.token, self.automatos, self.entrada, self.pilha)
-                        sub.executar()
-                        self.estadoAtual = self.pilha.pop()
+                for transicao in trans_validas:
+                    if transicao.token.token == token.token:
+                        if token.classe == 'submaq':
+                            self.pilha.append(transicao.prox_estado)
+                            sub = MaquinaDeEstados(token.token, self.automatos, self.entrada, self.pilha)
+                            sub.executar()
+                            self.estadoAtual = self.pilha.pop()
+                            deve_verificar_estado = False
+                        else:
+                            self.estadoAtual = transicao.prox_estado
+                            print self.estadoAtual
+                            deve_verificar_estado = False
+                            break
+
                     else:
-                        self.estadoAtual = transicao.prox_estado
-                        print self.estadoAtual
-                        break
-                    deve_verificar_estado = False
-                else:
-                    deve_verificar_estado = True
+                        deve_verificar_estado = True
 
-            if deve_verificar_estado:
+                if deve_verificar_estado:
+                    if self.estadoAtual in self.estadosFinais:
+                        print "atingiu estado final"
+
+                    else:
+                        self.estadoAtual = None
+                        print "nao ha transicao desse estado e a maq nao estava em um estado Final"
+                        return 1
+
+            except:
                 if self.estadoAtual in self.estadosFinais:
                     print "atingiu estado final"
-
                 else:
                     self.estadoAtual = None
-                    print "nao ha transicao desse estado e a maq nao estava em um estado Final"
-                    return 1
+                    print "Cadeia de entrada acabou e a maq nao estava em um estado Final"
+                break

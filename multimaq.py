@@ -6,7 +6,7 @@ class Multimaq:
 
     def parse(self):
         with open(self.filename, 'r') as read:
-            no = 1
+            no = 0
             name = 'auto_' + str(no) + '.txt'
             linha = read.readline()
             while linha and linha not in ['\n', '\r\n']:

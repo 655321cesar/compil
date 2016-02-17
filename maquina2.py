@@ -1,8 +1,7 @@
-__author__ = 'Cesar'
-
 from automatodepilhaestruturado import *
 from multimaq import *
 
+__author__ = 'Cesar'
 
 if __name__ == "__main__":
 
@@ -13,7 +12,7 @@ if __name__ == "__main__":
     automatos = []
 
     for no in range(no_automatos):
-        nome = 'auto_' + str(no)
+        nome = 'auto_' + str(no) + '.txt'
         automatos.append(Automato(nome))
 
     pilha = []
