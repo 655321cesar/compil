@@ -1,16 +1,24 @@
 __author__ = 'Cesar'
 
-from maquinadeestados import Automato
-from maquinadeestados import MaquinaDeEstados
+from automatodepilhaestruturado import *
+from multimaq import *
 
 
 if __name__ == "__main__":
 
-    automato = Automato("teste.txt")
+    no_automatos = Multimaq("teste.txt").parse()
     arquivo = open('cadeia.txt', 'r')
-    entrada = arquivo.readline().rstrip('\n')
-    tokens = list(entrada)
-    maq = MaquinaDeEstados(automato, tokens)
+    entradapura = arquivo.readline().rstrip('\n')
+    entrada = [Token(item).tokenize() for item in entradapura]
+    automatos = []
+
+    for no in range(no_automatos):
+        nome = 'auto_' + str(no)
+        automatos.append(Automato(nome))
+
+    pilha = []
+
+    maq = MaquinaDeEstados(automatos[0].name, automatos, entrada, pilha)
     maq.executar()
 
 
